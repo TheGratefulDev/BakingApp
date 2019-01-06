@@ -1,4 +1,4 @@
-package com.notaprogrammer.baking;
+package com.notaprogrammer.baking.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.notaprogrammer.baking.obj.Recipe;
+import com.notaprogrammer.baking.R;
+import com.notaprogrammer.baking.model.Recipe;
 
 import java.util.List;
 

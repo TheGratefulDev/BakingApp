@@ -1,6 +1,7 @@
-package com.notaprogrammer.baking;
+package com.notaprogrammer.baking.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,21 +15,25 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.notaprogrammer.baking.obj.Recipe;
+import com.notaprogrammer.baking.ItemListActivity;
+import com.notaprogrammer.baking.R;
+import com.notaprogrammer.baking.dummy.RecipeJson;
+import com.notaprogrammer.baking.adapters.RecipeAdapter;
+import com.notaprogrammer.baking.model.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeListFragment extends Fragment implements RecipeAdapter.ItemClickListener {
 
+    public static final String ARG_RECIPE = "ARG_RECIPE";
     List<Recipe> recipeList = new ArrayList<>();
     RecyclerView recipeRecyclerView;
     RecipeAdapter recipeAdapter;
     Context context;
 
     public RecipeListFragment(){
-        recipeList = new Gson().fromJson(RecipeJson.JSON, new TypeToken<List<Recipe>>(){}.getType());
+        recipeList = Recipe.parseJsonList(RecipeJson.JSON);
         recipeAdapter = new RecipeAdapter(recipeList, this);
         context = this.getContext();
     }
@@ -54,6 +59,9 @@ public class RecipeListFragment extends Fragment implements RecipeAdapter.ItemCl
 
     @Override
     public void onListItemClick(Recipe selectedRecipe) {
+        Intent intent = new Intent(this.getActivity(), ItemListActivity.class);
+        intent.putExtra(ItemListActivity.SELECTED_RECIPE_JSON, new Gson().toJson(selectedRecipe));
+        startActivity(intent);
         Toast.makeText(getActivity(), selectedRecipe.getName(), Toast.LENGTH_SHORT).show();
     }
 
