@@ -37,7 +37,14 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.idView.setText(String.valueOf( position + 1) );
+
+        if(position > 0){
+            holder.idView.setText("Step " +String.valueOf( position  ));
+        }else{
+            holder.idView.setText("Step 0");
+        }
+        //TODO CREATE DIFFERENT HOLDER FOR THIS
+
         holder.contentView.setText(stepList.get(position).getShortDescription());
         holder.itemView.setTag(stepList.get(position));
         holder.itemView.setOnClickListener(onClickListener);
