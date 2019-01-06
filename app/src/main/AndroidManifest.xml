@@ -20,8 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".ItemListActivity"
+            android:name=".StepsListActivity"
             android:label="@string/title_item_list"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -29,15 +30,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.notaprogrammer.baking.activities.MainActivity" />
         </activity>
+
         <activity
             android:name=".ItemDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName=".ItemListActivity"
+            android:parentActivityName=".StepsListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.notaprogrammer.baking.ItemListActivity" />
+                android:value="com.notaprogrammer.baking.StepsListActivity" />
         </activity>
+
     </application>
 
 </manifest>

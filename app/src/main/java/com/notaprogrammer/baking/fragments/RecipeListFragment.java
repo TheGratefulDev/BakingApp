@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.notaprogrammer.baking.ItemListActivity;
+import com.notaprogrammer.baking.StepsListActivity;
 import com.notaprogrammer.baking.R;
 import com.notaprogrammer.baking.dummy.RecipeJson;
 import com.notaprogrammer.baking.adapters.RecipeAdapter;
@@ -59,8 +59,8 @@ public class RecipeListFragment extends Fragment implements RecipeAdapter.ItemCl
 
     @Override
     public void onListItemClick(Recipe selectedRecipe) {
-        Intent intent = new Intent(this.getActivity(), ItemListActivity.class);
-        intent.putExtra(ItemListActivity.SELECTED_RECIPE_JSON, new Gson().toJson(selectedRecipe));
+        Intent intent = new Intent(this.getActivity(), StepsListActivity.class);
+        intent.putExtra(StepsListActivity.SELECTED_RECIPE_JSON, new Gson().toJson(selectedRecipe));
         startActivity(intent);
         Toast.makeText(getActivity(), selectedRecipe.getName(), Toast.LENGTH_SHORT).show();
     }

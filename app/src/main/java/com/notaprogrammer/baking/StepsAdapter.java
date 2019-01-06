@@ -14,14 +14,14 @@ import com.notaprogrammer.baking.model.Recipe;
 
 import java.util.List;
 
-public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.ViewHolder> {
+public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> {
 
-    private final ItemListActivity parentActivity;
+    private final StepsListActivity parentActivity;
     Recipe recipe;
     private List<Recipe.Step> stepList;
     private final boolean isTwoPane;
 
-    RecipeStepsAdapter(ItemListActivity parent, Recipe items, boolean twoPane) {
+    StepsAdapter(StepsListActivity parent, Recipe items, boolean twoPane) {
         recipe = items;
         stepList = recipe.getSteps();
         parentActivity = parent;
@@ -31,14 +31,14 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_content, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.step_list_content, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.mIdView.setText(String.valueOf( stepList.get(position).getId()) );
-        holder.mContentView.setText(stepList.get(position).getShortDescription());
+        holder.idView.setText(String.valueOf( position + 1) );
+        holder.contentView.setText(stepList.get(position).getShortDescription());
         holder.itemView.setTag(stepList.get(position));
         holder.itemView.setOnClickListener(onClickListener);
     }
@@ -50,13 +50,13 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        final TextView mIdView;
-        final TextView mContentView;
+        final TextView idView;
+        final TextView contentView;
 
         ViewHolder(View view) {
             super(view);
-            mIdView = view.findViewById(R.id.id_text);
-            mContentView = view.findViewById(R.id.content);
+            idView = view.findViewById(R.id.id_text);
+            contentView = view.findViewById(R.id.content);
         }
     }
 
@@ -84,7 +84,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
                 Context context = view.getContext();
                 Intent intent = new Intent(context, ItemDetailActivity.class);
                 intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, step.toJsonString());
-
+                // start the new activity
                 context.startActivity(intent);
 
             }

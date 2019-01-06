@@ -8,6 +8,10 @@ import com.notaprogrammer.baking.dummy.RecipeJson;
 
 import java.util.List;
 
+import static com.notaprogrammer.baking.model.Recipe.Ingredient.LABEL;
+import static com.notaprogrammer.baking.model.Recipe.Ingredient.NEW_LINE;
+import static com.notaprogrammer.baking.model.Recipe.Ingredient.SUFFIX;
+
 public class Recipe {
 
     @SerializedName("id")
@@ -92,8 +96,30 @@ public class Recipe {
         return new Gson().toJson(this);
     }
 
+    public String getIngredientCardDetail() {
+
+        if(ingredients == null || ingredients.size() == 0){
+            return "";
+        }
+
+        StringBuilder ingredientsStringBuilder = new StringBuilder();
+
+        ingredientsStringBuilder.append("<strong>").append(name).append(LABEL).append("</strong>");
+
+        for (Ingredient ingredient: ingredients) {
+            ingredientsStringBuilder.append(NEW_LINE).append(SUFFIX).append( ingredient.getReadableString());
+        }
+
+        return ingredientsStringBuilder.toString();
+    }
 
     public static class Ingredient {
+        static final String NEW_LINE = "<br />";
+        static final String LABEL = " Ingredient Card ";
+        static final String SUFFIX = "•";
+        private static final String SPACING = " ";
+        private static final String OPEN = "(";
+        private static final String CLOSE = ")";
 
         @SerializedName("quantity")
         private double quantity;
@@ -134,6 +160,9 @@ public class Recipe {
             return new Gson().toJson(this);
         }
 
+        public String getReadableString(){
+            return ingredient + SPACING + OPEN + quantity + measure + CLOSE;
+        }
     }
 
 
@@ -205,6 +234,8 @@ public class Recipe {
         public String toJsonString(){
             return new Gson().toJson(this);
         }
+
+
     }
 
 
