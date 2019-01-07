@@ -5,9 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view_ingredients"
     android:name="com.notaprogrammer.baking.ItemListFragment"
-
     android:layout_margin="16dp"
-
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
     tools:context=".StepsListActivity"
     android:layout_gravity="center"
