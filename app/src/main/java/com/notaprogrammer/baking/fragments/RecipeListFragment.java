@@ -12,22 +12,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.notaprogrammer.baking.StepsListActivity;
 import com.notaprogrammer.baking.R;
-import com.notaprogrammer.baking.dummy.RecipeJson;
+import com.notaprogrammer.baking.StepsListActivity;
 import com.notaprogrammer.baking.adapters.RecipeAdapter;
+import com.notaprogrammer.baking.dummy.RecipeJson;
 import com.notaprogrammer.baking.model.Recipe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeListFragment extends Fragment implements RecipeAdapter.ItemClickListener {
 
     public static final String ARG_RECIPE = "ARG_RECIPE";
-    List<Recipe> recipeList = new ArrayList<>();
+    List<Recipe> recipeList;
     RecyclerView recipeRecyclerView;
     RecipeAdapter recipeAdapter;
     Context context;
@@ -62,7 +60,6 @@ public class RecipeListFragment extends Fragment implements RecipeAdapter.ItemCl
         Intent intent = new Intent(this.getActivity(), StepsListActivity.class);
         intent.putExtra(StepsListActivity.SELECTED_RECIPE_JSON, new Gson().toJson(selectedRecipe));
         startActivity(intent);
-        Toast.makeText(getActivity(), selectedRecipe.getName(), Toast.LENGTH_SHORT).show();
     }
 
 

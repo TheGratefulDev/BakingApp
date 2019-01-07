@@ -1,37 +1,40 @@
 package com.notaprogrammer.baking;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
-/**
- * An activity representing a single Item detail screen. This
- * activity is only used on narrow width devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
- * in a {@link StepsListActivity}.
- */
-public class ItemDetailActivity extends AppCompatActivity {
+import com.google.gson.Gson;
+import com.notaprogrammer.baking.model.Recipe;
+
+import java.util.List;
+
+public class ItemDetailActivity extends AppCompatActivity implements View.OnClickListener {
+
+    Button previousButton;
+    Button nextButton;
+    String currentSelectedJson;
+    String recipeJson;
+    List<Recipe.Step> stepList;
+    Recipe.Step currentStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        nextButton = findViewById(R.id.next_step_button);
+        previousButton = findViewById(R.id.previous_step_button);
+
+        nextButton.setOnClickListener(this);
+        previousButton.setOnClickListener(this);
+
+        Toolbar toolbar = findViewById(R.id.toolbar_detail);
+        setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -39,27 +42,28 @@ public class ItemDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        // savedInstanceState is non-null when there is fragment state
-        // saved from previous configurations of this activity
-        // (e.g. when rotating the screen from portrait to landscape).
-        // In this case, the fragment will automatically be re-added
-        // to its container so we don't need to manually add it.
-        // For more information, see the Fragments API guide at:
-        //
-        // http://developer.android.com/guide/components/fragments.html
-        //
         if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(ItemDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
-            ItemDetailFragment fragment = new ItemDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.item_detail_container, fragment)
-                    .commit();
+
+            currentSelectedJson = getIntent().getStringExtra(ItemDetailFragment.ARG_SELECTED_ITEM);
+            recipeJson = getIntent().getStringExtra(ItemDetailFragment.ARG_ITEMS);
+            stepList = Recipe.parseJsonObject(recipeJson).getSteps();
+            updateFragment(currentSelectedJson);
         }
+    }
+
+    public void updateFragment(String selectedStepJson){
+
+        currentStep = new Gson().fromJson(selectedStepJson, Recipe.Step.class);
+
+        updateNavigateButtonUi(currentStep.getId()-1> - 1 , currentStep.getId() + 1 < stepList.size() );
+
+        Bundle arguments = new Bundle();
+        arguments.putString(ItemDetailFragment.ARG_SELECTED_ITEM, selectedStepJson);
+        ItemDetailFragment fragment = new ItemDetailFragment();
+        fragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction().replace(R.id.item_detail_container, fragment).commit();
+
+
     }
 
     @Override
@@ -70,5 +74,35 @@ public class ItemDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        int nextPosition = currentStep.getId()+1;
+        int previousPosition = currentStep.getId()-1;
+
+        if( v.getId()== R.id.next_step_button ){
+            updateFragment( findStepById(nextPosition) );
+        }
+
+        if( v.getId() == R.id.previous_step_button ){
+            updateFragment( findStepById(previousPosition) );
+        }
+
+    }
+
+    private void updateNavigateButtonUi(boolean displayPreviousButton, boolean displayNextButton) {
+        previousButton.setEnabled(displayPreviousButton);
+        nextButton.setEnabled(displayNextButton);
+    }
+
+    private String findStepById(int id){
+        for (Recipe.Step step : stepList){
+            if(step.getId() == id ){
+                return new Gson().toJson(step);
+            }
+        }
+        return null;
     }
 }

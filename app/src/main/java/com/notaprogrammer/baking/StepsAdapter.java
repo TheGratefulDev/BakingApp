@@ -2,6 +2,7 @@ package com.notaprogrammer.baking;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,8 @@ import com.notaprogrammer.baking.model.Recipe;
 import java.util.List;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> {
+
+    private int selectedId = -1;
 
     private final StepsListActivity parentActivity;
     Recipe recipe;
@@ -38,16 +41,15 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
-        if(position > 0){
-            holder.idView.setText("Step " +String.valueOf( position  ));
-        }else{
-            holder.idView.setText("Step 0");
-        }
-        //TODO CREATE DIFFERENT HOLDER FOR THIS
-
+        holder.idView.setText(String.valueOf( position ));
         holder.contentView.setText(stepList.get(position).getShortDescription());
         holder.itemView.setTag(stepList.get(position));
         holder.itemView.setOnClickListener(onClickListener);
+
+        if(isTwoPane){
+            holder.itemView.setBackgroundColor(selectedId == stepList.get(position).getId() ? Color.GRAY : Color.TRANSPARENT);
+        }
+
     }
 
     @Override
@@ -76,9 +78,13 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
 
             if (isTwoPane) {
 
+                notifyItemChanged(selectedId);
+                selectedId = step.getId();
+                notifyItemChanged(selectedId);
+
                 Bundle arguments = new Bundle();
 
-                arguments.putString(ItemDetailFragment.ARG_ITEM_ID, step.toJsonString());
+                arguments.putString(ItemDetailFragment.ARG_SELECTED_ITEM, step.toJsonString());
                 ItemDetailFragment fragment = new ItemDetailFragment();
                 fragment.setArguments(arguments);
                 parentActivity.getSupportFragmentManager()
@@ -90,10 +96,10 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
 
                 Context context = view.getContext();
                 Intent intent = new Intent(context, ItemDetailActivity.class);
-                intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, step.toJsonString());
+                intent.putExtra(ItemDetailFragment.ARG_SELECTED_ITEM, step.toJsonString());
+                intent.putExtra(ItemDetailFragment.ARG_ITEMS, recipe.toJsonString());
                 // start the new activity
                 context.startActivity(intent);
-
             }
         }
     };

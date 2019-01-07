@@ -235,8 +235,5 @@ public class Recipe {
             return new Gson().toJson(this);
         }
 
-
     }
-
-
 }
