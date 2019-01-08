@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,12 +27,14 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.notaprogrammer.baking.model.Recipe;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Objects;
 
 public class ItemDetailFragment extends Fragment {
 
     public static final String ARG_SELECTED_ITEM = "ARG_SELECTED_ITEM";
-    public static final String ARG_ITEMS = "ARG_ITEMS";
+
     Recipe.Step step;
 
     public ItemDetailFragment() { }
@@ -81,9 +82,18 @@ public class ItemDetailFragment extends Fragment {
         playerView.setVisibility(View.GONE);
 
         initalizePlayer(step);
-        // Show the dummy content as text in a TextView.
+
         if (step != null) {
-            ((TextView) rootView.findViewById(R.id.tv_item_detail)).setText(Html.fromHtml(step.getDescription()));
+
+            String word = "";
+            try {
+                 word = URLDecoder.decode(step.getDescription(),"UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+
+            ((TextView) rootView.findViewById(R.id.tv_item_detail)).setText(word);
         }
 
         return rootView;
@@ -142,7 +152,6 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         releasePlayer();
     }
 }

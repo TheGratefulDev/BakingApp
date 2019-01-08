@@ -19,8 +19,11 @@ import android.widget.Toast;
 
 import com.notaprogrammer.baking.model.Recipe;
 
+import static com.notaprogrammer.baking.ItemDetailActivity.ARG_ITEMS;
+import static com.notaprogrammer.baking.ItemDetailActivity.ARG_SELECTED_ITEM_ID;
 
-public class StepsListActivity extends AppCompatActivity {
+
+public class StepsListActivity extends AppCompatActivity implements StepsAdapter.StepsAdapterInterface {
 
     public static final String SELECTED_RECIPE_JSON = "SELECTED_RECIPE_JSON";
     private String recipeJsonString;
@@ -86,13 +89,6 @@ public class StepsListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
             NavUtils.navigateUpFromSameTask(this);
             return true;
         }
@@ -112,6 +108,31 @@ public class StepsListActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(SELECTED_RECIPE_JSON, selectedRecipe.toJsonString());
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void selected(int step) {
+
+        if (isTwoPane) {
+
+            Bundle arguments = ItemDetailUtils.detailBundle(selectedRecipe.getSteps().get(step));
+
+            ItemDetailFragment fragment = new ItemDetailFragment();
+            fragment.setArguments(arguments);
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.item_detail_container, fragment)
+                    .commit();
+
+        } else {
+
+            Intent intent = new Intent(this, ItemDetailActivity.class);
+            intent.putExtra(ARG_SELECTED_ITEM_ID, step);
+            intent.putExtra(ARG_ITEMS, selectedRecipe.toJsonString());
+            startActivity(intent);
+
+        }
     }
 }
 

@@ -1,9 +1,7 @@
 package com.notaprogrammer.baking;
 
-import android.content.Context;
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,13 +16,26 @@ import java.util.List;
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> {
 
     private int selectedId = -1;
-
+    private StepsAdapterInterface listener;
     private final StepsListActivity parentActivity;
     Recipe recipe;
     private List<Recipe.Step> stepList;
     private final boolean isTwoPane;
 
+
+    interface StepsAdapterInterface{
+        void selected(int position);
+    }
+
     StepsAdapter(StepsListActivity parent, Recipe items, boolean twoPane) {
+
+        try {
+            this.listener = ((StepsAdapterInterface) parent);
+        } catch (ClassCastException e) {
+            throw new ClassCastException("SplashActivity must implement AdapterCallback.");
+        }
+
+
         recipe = items;
         stepList = recipe.getSteps();
         parentActivity = parent;
@@ -39,16 +50,32 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+
+        Recipe.Step selectedStep = stepList.get(position);
 
         holder.idView.setText(String.valueOf( position ));
-        holder.contentView.setText(stepList.get(position).getShortDescription());
-        holder.itemView.setTag(stepList.get(position));
-        holder.itemView.setOnClickListener(onClickListener);
+        holder.contentView.setText(selectedStep.getShortDescription());
+        holder.itemView.setTag(selectedStep);
 
         if(isTwoPane){
-            holder.itemView.setBackgroundColor(selectedId == stepList.get(position).getId() ? Color.GRAY : Color.TRANSPARENT);
+            holder.itemView.setBackgroundColor(selectedId == position ? Color.GRAY : Color.TRANSPARENT);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (isTwoPane) {
+
+                    notifyItemChanged(selectedId);
+                    selectedId = position;
+                    notifyItemChanged(selectedId);
+                }
+
+                listener.selected(position);
+            }
+        });
 
     }
 
@@ -68,41 +95,4 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
             contentView = view.findViewById(R.id.content);
         }
     }
-
-    private final View.OnClickListener onClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View view) {
-
-            Recipe.Step step = (Recipe.Step) view.getTag();
-
-            if (isTwoPane) {
-
-                notifyItemChanged(selectedId);
-                selectedId = step.getId();
-                notifyItemChanged(selectedId);
-
-                Bundle arguments = new Bundle();
-
-                arguments.putString(ItemDetailFragment.ARG_SELECTED_ITEM, step.toJsonString());
-                ItemDetailFragment fragment = new ItemDetailFragment();
-                fragment.setArguments(arguments);
-                parentActivity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.item_detail_container, fragment)
-                        .commit();
-
-            } else {
-
-                Context context = view.getContext();
-                Intent intent = new Intent(context, ItemDetailActivity.class);
-                intent.putExtra(ItemDetailFragment.ARG_SELECTED_ITEM, step.toJsonString());
-                intent.putExtra(ItemDetailFragment.ARG_ITEMS, recipe.toJsonString());
-                // start the new activity
-                context.startActivity(intent);
-            }
-        }
-    };
-
-
 }
