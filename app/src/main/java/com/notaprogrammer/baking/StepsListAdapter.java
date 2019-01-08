@@ -13,32 +13,22 @@ import com.notaprogrammer.baking.model.Recipe;
 
 import java.util.List;
 
-public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> {
+public class StepsListAdapter extends RecyclerView.Adapter<StepsListAdapter.ViewHolder> {
 
     private int selectedId = -1;
-    private StepsAdapterInterface listener;
-    private final StepsListActivity parentActivity;
-    Recipe recipe;
+    private AdapterOnClickInterface listener;
     private List<Recipe.Step> stepList;
     private final boolean isTwoPane;
 
-
-    interface StepsAdapterInterface{
-        void selected(int position);
-    }
-
-    StepsAdapter(StepsListActivity parent, Recipe items, boolean twoPane) {
+    StepsListAdapter(StepsListActivity parent, Recipe items, boolean twoPane) {
 
         try {
-            this.listener = ((StepsAdapterInterface) parent);
+            this.listener = parent;
         } catch (ClassCastException e) {
-            throw new ClassCastException("SplashActivity must implement AdapterCallback.");
+            throw new ClassCastException("StepsListActivity must implement AdapterCallback.");
         }
 
-
-        recipe = items;
-        stepList = recipe.getSteps();
-        parentActivity = parent;
+        stepList = items.getSteps();
         isTwoPane = twoPane;
     }
 

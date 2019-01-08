@@ -1,6 +1,7 @@
 package com.notaprogrammer.baking;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,16 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.notaprogrammer.baking.model.Recipe;
@@ -31,13 +32,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Objects;
 
-public class ItemDetailFragment extends Fragment {
+public class DetailFragment extends Fragment {
 
     public static final String ARG_SELECTED_ITEM = "ARG_SELECTED_ITEM";
 
     Recipe.Step step;
 
-    public ItemDetailFragment() { }
+    public DetailFragment() { }
 
     @Override
     public void onStart() {
@@ -55,11 +56,11 @@ public class ItemDetailFragment extends Fragment {
             step = Recipe.Step.parseJSON(getArguments().getString(ARG_SELECTED_ITEM));
 
             Activity activity = getActivity();
-            if(activity instanceof  ItemDetailActivity){
-                ItemDetailActivity itemDetailActivity = (ItemDetailActivity) getActivity();
+            if(activity instanceof DetailActivity){
+                DetailActivity detailActivity = (DetailActivity) getActivity();
                 ActionBar actionBar = null;
-                if (itemDetailActivity != null) {
-                    actionBar = itemDetailActivity.getSupportActionBar();
+                if (detailActivity != null) {
+                    actionBar = detailActivity.getSupportActionBar();
                 }
 
                 if (actionBar != null) {
@@ -81,7 +82,7 @@ public class ItemDetailFragment extends Fragment {
         playerView = rootView.findViewById(R.id.exo_player);
         playerView.setVisibility(View.GONE);
 
-        initalizePlayer(step);
+        initializePlayer(Objects.requireNonNull(this.getActivity()).getApplicationContext(),  step);
 
         if (step != null) {
 
@@ -114,31 +115,34 @@ public class ItemDetailFragment extends Fragment {
     }
 
 
-    private void initalizePlayer(Recipe.Step step) {
+    private void initializePlayer(Context context, Recipe.Step step) {
 
         if(TextUtils.isEmpty(step.getVideoUrl())){
+
             playerView.setVisibility(View.GONE);
+
         }else{
+
             if(exoPlayer == null){
+                Uri mediaUri = Uri.parse(step.getVideoUrl());
 
-                TrackSelector trackSelector = new DefaultTrackSelector();
-                LoadControl loadControl = new DefaultLoadControl();
-                exoPlayer = ExoPlayerFactory.newSimpleInstance(Objects.requireNonNull(this.getActivity()).getApplicationContext(), trackSelector, loadControl);
+                DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory());
+
+                exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
+
+                // Bind the player to the view.
                 playerView.setPlayer(exoPlayer);
-
-                String userAgent = Util.getUserAgent(this.getActivity().getApplicationContext(), this.getActivity().getPackageName());
-
-                MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(step.getVideoUrl()), new DefaultDataSourceFactory(this.getActivity().getApplicationContext(), userAgent), new DefaultExtractorsFactory(), null, null);
+                DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context, Util.getUserAgent(getContext(), getString(R.string.app_name)), bandwidthMeter);
+                MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(mediaUri);
 
                 exoPlayer.prepare(mediaSource);
                 exoPlayer.setPlayWhenReady(true);
-
+                playerView.setVisibility(View.VISIBLE);
             }
-            playerView.setVisibility(View.VISIBLE);
+
         }
-
     }
-
 
     private void releasePlayer(){
         if(exoPlayer!=null){

@@ -34,7 +34,7 @@
         </activity>
 
         <activity
-            android:name=".ItemDetailActivity"
+            android:name=".DetailActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:label="@string/title_item_detail"
             android:parentActivityName=".StepsListActivity"

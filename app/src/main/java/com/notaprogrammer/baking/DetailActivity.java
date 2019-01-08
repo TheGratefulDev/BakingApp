@@ -12,7 +12,7 @@ import com.notaprogrammer.baking.model.Recipe;
 
 import java.util.List;
 
-public class ItemDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String ARG_ITEMS = "ARG_ITEMS";
     public static final String ARG_SELECTED_ITEM_ID = "ARG_SELECTED_ITEM_ID";
@@ -56,11 +56,12 @@ public class ItemDetailActivity extends AppCompatActivity implements View.OnClic
 
         selectedPosition = currentSelectedPosition;
 
-        updateNavigateButtonUi(currentSelectedPosition-1> - 1 , currentSelectedPosition + 1 < stepList.size() );
+        enablePreviousButton(currentSelectedPosition-1> - 1);
+        enableNextButton(currentSelectedPosition + 1 < stepList.size());
 
         Bundle arguments = ItemDetailUtils.detailBundle(stepList.get(currentSelectedPosition));
 
-        ItemDetailFragment fragment = new ItemDetailFragment();
+        DetailFragment fragment = new DetailFragment();
         fragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction().replace(R.id.item_detail_container, fragment).commit();
 
@@ -92,8 +93,12 @@ public class ItemDetailActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private void updateNavigateButtonUi(boolean displayPreviousButton, boolean displayNextButton) {
+    private void enablePreviousButton(boolean displayPreviousButton) {
         previousButton.setEnabled(displayPreviousButton);
+    }
+
+    private void enableNextButton( boolean displayNextButton) {
         nextButton.setEnabled(displayNextButton);
     }
+
 }

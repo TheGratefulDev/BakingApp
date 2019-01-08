@@ -19,11 +19,11 @@ import android.widget.Toast;
 
 import com.notaprogrammer.baking.model.Recipe;
 
-import static com.notaprogrammer.baking.ItemDetailActivity.ARG_ITEMS;
-import static com.notaprogrammer.baking.ItemDetailActivity.ARG_SELECTED_ITEM_ID;
+import static com.notaprogrammer.baking.DetailActivity.ARG_ITEMS;
+import static com.notaprogrammer.baking.DetailActivity.ARG_SELECTED_ITEM_ID;
 
 
-public class StepsListActivity extends AppCompatActivity implements StepsAdapter.StepsAdapterInterface {
+public class StepsListActivity extends AppCompatActivity implements AdapterOnClickInterface {
 
     public static final String SELECTED_RECIPE_JSON = "SELECTED_RECIPE_JSON";
     private String recipeJsonString;
@@ -101,7 +101,7 @@ public class StepsListActivity extends AppCompatActivity implements StepsAdapter
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, Recipe selectedRecipe) {
-        recyclerView.setAdapter(new StepsAdapter(this, selectedRecipe, isTwoPane));
+        recyclerView.setAdapter(new StepsListAdapter(this, selectedRecipe, isTwoPane));
     }
 
     @Override
@@ -117,7 +117,7 @@ public class StepsListActivity extends AppCompatActivity implements StepsAdapter
 
             Bundle arguments = ItemDetailUtils.detailBundle(selectedRecipe.getSteps().get(step));
 
-            ItemDetailFragment fragment = new ItemDetailFragment();
+            DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);
 
             getSupportFragmentManager()
@@ -127,7 +127,7 @@ public class StepsListActivity extends AppCompatActivity implements StepsAdapter
 
         } else {
 
-            Intent intent = new Intent(this, ItemDetailActivity.class);
+            Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra(ARG_SELECTED_ITEM_ID, step);
             intent.putExtra(ARG_ITEMS, selectedRecipe.toJsonString());
             startActivity(intent);

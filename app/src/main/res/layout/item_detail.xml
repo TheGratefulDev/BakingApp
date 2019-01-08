@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textIsSelectable="true"
         android:orientation="vertical"
-        tools:context=".ItemDetailFragment" >
+        tools:context=".DetailFragment" >
 
             <FrameLayout
                 android:id="@+id/exo_player_frame"
@@ -24,7 +24,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:resize_mode="fixed_width"
-                    app:use_controller="false"
                     android:visibility="gone"
                     android:src="@mipmap/ic_launcher" />
 
@@ -39,4 +38,5 @@
                 android:textIsSelectable="true" />
 
     </LinearLayout>
+
 </ScrollView>

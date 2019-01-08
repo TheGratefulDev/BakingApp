@@ -114,9 +114,11 @@ public class Recipe {
     }
 
     public static class Ingredient {
+
         static final String NEW_LINE = "<br />";
         static final String LABEL = " Ingredient Card ";
         static final String SUFFIX = "•";
+
         private static final String SPACING = " ";
         private static final String OPEN = "(";
         private static final String CLOSE = ")";
