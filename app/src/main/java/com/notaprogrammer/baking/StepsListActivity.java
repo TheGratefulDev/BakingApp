@@ -12,12 +12,16 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.notaprogrammer.baking.Implement.AdapterOnClickInterface;
 import com.notaprogrammer.baking.model.Recipe;
+import com.notaprogrammer.baking.utils.DetailUtils;
 
 import static com.notaprogrammer.baking.DetailActivity.ARG_ITEMS;
 import static com.notaprogrammer.baking.DetailActivity.ARG_SELECTED_ITEM_ID;
@@ -91,7 +95,24 @@ public class StepsListActivity extends AppCompatActivity implements AdapterOnCli
         if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
             return true;
+        }else if(id == R.id.action_add_card_to_widget){
+
+            if(getTitle().equals("Remove From Widget")){
+                item.setTitle("Add To Widget");
+                // AppWidgetService.updateWidget(this, mRecipe);
+                Toast.makeText(StepsListActivity.this, selectedRecipe.getName() + " ingredient card has been removed from the Widget", Toast.LENGTH_SHORT).show();
+            }else{
+                item.setTitle("Remove From Widget");
+                // AppWidgetService.updateWidget(this, mRecipe);
+                Toast.makeText(StepsListActivity.this, selectedRecipe.getName() + " ingredient card has been added to the Widget", Toast.LENGTH_SHORT).show();
+            }
+
+
+
+
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -115,7 +136,7 @@ public class StepsListActivity extends AppCompatActivity implements AdapterOnCli
 
         if (isTwoPane) {
 
-            Bundle arguments = ItemDetailUtils.detailBundle(selectedRecipe.getSteps().get(step));
+            Bundle arguments = DetailUtils.detailBundle(selectedRecipe.getSteps().get(step));
 
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);
@@ -134,5 +155,14 @@ public class StepsListActivity extends AppCompatActivity implements AdapterOnCli
 
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.step_list_menu, menu);
+        return true;
+    }
+
 }
 

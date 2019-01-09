@@ -50,9 +50,7 @@ public class DetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null && getArguments().containsKey(ARG_SELECTED_ITEM)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
+
             step = Recipe.Step.parseJSON(getArguments().getString(ARG_SELECTED_ITEM));
 
             Activity activity = getActivity();
@@ -107,11 +105,10 @@ public class DetailFragment extends Fragment {
         // Checking the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
-
-
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
 
         }
+
     }
 
 
@@ -131,7 +128,6 @@ public class DetailFragment extends Fragment {
 
                 exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
 
-                // Bind the player to the view.
                 playerView.setPlayer(exoPlayer);
                 DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context, Util.getUserAgent(getContext(), getString(R.string.app_name)), bandwidthMeter);
                 MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(mediaUri);

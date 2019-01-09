@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.notaprogrammer.baking.model.Recipe;
+import com.notaprogrammer.baking.utils.DetailUtils;
 
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         enablePreviousButton(currentSelectedPosition-1> - 1);
         enableNextButton(currentSelectedPosition + 1 < stepList.size());
 
-        Bundle arguments = ItemDetailUtils.detailBundle(stepList.get(currentSelectedPosition));
+        Bundle arguments = DetailUtils.detailBundle(stepList.get(currentSelectedPosition));
 
         DetailFragment fragment = new DetailFragment();
         fragment.setArguments(arguments);

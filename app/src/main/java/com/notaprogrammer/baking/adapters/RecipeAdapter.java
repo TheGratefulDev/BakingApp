@@ -1,5 +1,6 @@
 package com.notaprogrammer.baking.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,23 +9,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.notaprogrammer.baking.Implement.RecipeAdapterOnClickInterface;
 import com.notaprogrammer.baking.R;
 import com.notaprogrammer.baking.model.Recipe;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
-    private ItemClickListener onListItemClick;
+    private RecipeAdapterOnClickInterface adapterOnClickInterface;
     private List<Recipe> recipeList;
 
-    public interface ItemClickListener {
-        void onListItemClick(Recipe selectedRecipe);
-    }
 
-    public RecipeAdapter(List<Recipe> recipeList, ItemClickListener listener){
+    public RecipeAdapter(List<Recipe> recipeList, Activity activity){
         this.recipeList = recipeList;
-        this.onListItemClick = listener;
+         this.adapterOnClickInterface = (RecipeAdapterOnClickInterface) activity;
     }
 
     @NonNull
@@ -54,22 +54,25 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final TextView recipeNameTextView;
+        final TextView recipeServingTextView;
 
         RecipeViewHolder(View itemView) {
             super(itemView);
             recipeNameTextView = itemView.findViewById(R.id.textView_recipe_name);
+            recipeServingTextView = itemView.findViewById(R.id.textView_serving);
             itemView.setOnClickListener(this);
         }
 
         void bind(Recipe recipe) {
-           recipeNameTextView.setText(recipe.getName());
+            recipeNameTextView.setText(recipe.getName());
+            recipeServingTextView.setText(MessageFormat.format("{0} servings ", recipe.getServings()));
         }
 
         @Override
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
             Recipe selectedRecipe = recipeList.get(clickedPosition);
-            onListItemClick.onListItemClick(selectedRecipe);
+            adapterOnClickInterface.selected(selectedRecipe);
         }
     }
 

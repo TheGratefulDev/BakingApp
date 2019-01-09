@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
-import com.notaprogrammer.baking.dummy.RecipeJson;
 
 import java.util.List;
 
@@ -89,7 +88,7 @@ public class Recipe {
     }
 
     public static List<Recipe> parseJsonList(String response){
-        return new Gson().fromJson(RecipeJson.JSON, new TypeToken<List<Recipe>>(){}.getType());
+        return new Gson().fromJson(response, new TypeToken<List<Recipe>>(){}.getType());
     }
 
     public String toJsonString(){

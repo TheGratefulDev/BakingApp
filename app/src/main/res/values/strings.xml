@@ -5,4 +5,6 @@
     <string name="problem_loading_recipe">Problem Loading Recipe</string>
     <string name="previous_step">Previous Step</string>
     <string name="next_step">Next Step</string>
+    <string name="error_loading_the_recipes_please_try_again">Error Loading the Recipes, please try again</string>
+    <string name="add_to_widget">Add to Widget</string>
 </resources>

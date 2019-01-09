@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.notaprogrammer.baking.Implement.AdapterOnClickInterface;
 import com.notaprogrammer.baking.model.Recipe;
 
 import java.util.List;
@@ -81,8 +82,10 @@ public class StepsListAdapter extends RecyclerView.Adapter<StepsListAdapter.View
 
         ViewHolder(View view) {
             super(view);
+
             idView = view.findViewById(R.id.id_text);
             contentView = view.findViewById(R.id.content);
+
         }
     }
 }
