@@ -1,6 +1,7 @@
 package com.notaprogrammer.baking;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
@@ -93,17 +94,17 @@ public class StepsListActivity extends AppCompatActivity implements AdapterOnCli
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
+
             NavUtils.navigateUpFromSameTask(this);
             return true;
+
         }else if(id == R.id.action_add_card_to_widget){
 
-            if(getTitle().equals("Remove From Widget")){
-                item.setTitle("Add To Widget");
-                Toast.makeText(StepsListActivity.this, selectedRecipe.getName() + " ingredient card has been removed from the Widget", Toast.LENGTH_SHORT).show();
-            }else{
-                item.setTitle("Remove From Widget");
-                Toast.makeText(StepsListActivity.this, selectedRecipe.getName() + " ingredient card has been added to the Widget", Toast.LENGTH_SHORT).show();
-            }
+            SharedPreferences sharedPreferences = getSharedPreferences(Constant.PREFERENCE_NAME, MODE_PRIVATE);
+            sharedPreferences.edit().putString(Constant.RECIPE_WIDGET, selectedRecipe.toJsonString()).apply();
+            BakingWidgetService.updateWidget(this);
+
+            Toast.makeText(StepsListActivity.this, selectedRecipe.getName() + " ingredient card has been removed from the Widget", Toast.LENGTH_SHORT).show();
 
             return true;
         }
