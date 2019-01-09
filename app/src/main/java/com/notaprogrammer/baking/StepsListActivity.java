@@ -99,16 +99,11 @@ public class StepsListActivity extends AppCompatActivity implements AdapterOnCli
 
             if(getTitle().equals("Remove From Widget")){
                 item.setTitle("Add To Widget");
-                // AppWidgetService.updateWidget(this, mRecipe);
                 Toast.makeText(StepsListActivity.this, selectedRecipe.getName() + " ingredient card has been removed from the Widget", Toast.LENGTH_SHORT).show();
             }else{
                 item.setTitle("Remove From Widget");
-                // AppWidgetService.updateWidget(this, mRecipe);
                 Toast.makeText(StepsListActivity.this, selectedRecipe.getName() + " ingredient card has been added to the Widget", Toast.LENGTH_SHORT).show();
             }
-
-
-
 
             return true;
         }
@@ -117,8 +112,10 @@ public class StepsListActivity extends AppCompatActivity implements AdapterOnCli
     }
 
     private void setupHeaderView(CardView headerView, Recipe selectedRecipe) {
-        Spanned spanned = Html.fromHtml( selectedRecipe.getIngredientCardDetail() );
+        Spanned spanned = Html.fromHtml( selectedRecipe.getIngredientCardDetail()  );
         ((TextView) headerView.findViewById(R.id.textView_ingredients)).setText( spanned );
+      //  ListView listView = headerView.findViewById(R.id.listView_ingredients);
+      //  listView.setAdapter(new IngredientsAdapter(this.getApplicationContext(), selectedRecipe.getIngredients()));
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, Recipe selectedRecipe) {
