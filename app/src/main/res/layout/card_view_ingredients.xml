@@ -3,11 +3,11 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_view_ingredients"
+    android:id="@+id/cv_ingredients"
     android:name="com.notaprogrammer.baking.ItemListFragment"
     android:layout_margin="16dp"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    tools:context=".StepsListActivity"
+    tools:context=".activities.StepListActivity"
     android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
 
     <TextView
         android:padding="5dp"
-        android:id="@+id/textView_ingredients"
+        android:id="@+id/tv_ingredients"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start"

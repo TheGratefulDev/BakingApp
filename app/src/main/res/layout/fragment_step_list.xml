@@ -8,18 +8,18 @@
     android:scrollbars="none"
     android:overScrollMode="never"
     android:fillViewport="true"
-    tools:context=".StepsListActivity">
+    tools:context=".activities.StepListActivity">
 
     <LinearLayout android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include    layout="@layout/card_ingredients" />
+        <include    layout="@layout/card_view_ingredients" />
 
         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/item_list"
+            android:id="@+id/rv_stpe_list"
             android:name="com.notaprogrammer.baking.ItemListFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -27,7 +27,7 @@
             android:layout_marginRight="16dp"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
 
-            tools:listitem="@layout/step_list_content" />
+            tools:listitem="@layout/view_step" />
 
     </LinearLayout>
 

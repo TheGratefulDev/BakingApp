@@ -1,5 +1,7 @@
 package com.notaprogrammer.baking.model;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
@@ -161,12 +163,28 @@ public class Recipe {
             return new Gson().toJson(this);
         }
 
+        private String getReadableQuantity(){
+            if((quantity-(int)quantity)!=0){
+                return String.valueOf(quantity);
+            }else{
+                return String.valueOf((int)quantity);
+            }
+        }
+
+        private String getReadableMeasure(){
+            if(TextUtils.isEmpty(measure)){
+                return "";
+            }else{
+                return measure.toLowerCase();
+            }
+        }
+
         public String getReadableString(){
-            return ingredient + SPACING + OPEN + quantity + measure + CLOSE;
+
+
+            return ingredient + SPACING + OPEN + getReadableQuantity() + getReadableMeasure() + CLOSE;
         }
     }
-
-
 
     public static class Step {
 

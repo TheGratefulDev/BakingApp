@@ -7,6 +7,7 @@ import android.widget.RemoteViewsService;
 
 import com.notaprogrammer.baking.model.Recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BakingWidgetListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
@@ -16,7 +17,6 @@ public class BakingWidgetListRemoteViewsFactory implements RemoteViewsService.Re
 
     public BakingWidgetListRemoteViewsFactory(Context context) {
         this.context = context;
-
     }
 
     @Override
@@ -31,7 +31,12 @@ public class BakingWidgetListRemoteViewsFactory implements RemoteViewsService.Re
         String recipeJson = sharedPreferences.getString(Constant.RECIPE_WIDGET, null );
 
         Recipe recipe = Recipe.parseJsonObject(recipeJson);
-        ingredients = recipe.getIngredients();
+        if(recipe == null){
+            ingredients = new ArrayList<>();
+        }else{
+            ingredients = recipe.getIngredients();
+        }
+
     }
 
     @Override

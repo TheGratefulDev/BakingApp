@@ -3,8 +3,8 @@
     android:initialKeyguardLayout="@layout/baking_widget"
     android:initialLayout="@layout/baking_widget"
     android:minWidth="180dp"
-    android:minHeight="180dp"
-    android:previewImage="@drawable/recipes_image_place_holder"
+    android:minHeight="90dp"
+    android:previewImage="@drawable/appwidget_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"
     android:widgetCategory="home_screen"/>

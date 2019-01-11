@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.notaprogrammer.baking.R;
-import com.notaprogrammer.baking.adapters.RecipeAdapter;
+import com.notaprogrammer.baking.adapters.RecipeListAdapter;
 import com.notaprogrammer.baking.model.Recipe;
 import com.notaprogrammer.baking.utils.NetworkUtils;
 
@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -38,14 +40,16 @@ import static com.notaprogrammer.baking.Constant.RECIPE_LOCAL;
 
 public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    List<Recipe> recipeList = new ArrayList<>();
+    @BindView(R.id.rv_recipe_list) RecyclerView recipeRecyclerView;
+    @BindView(R.id.tv_error_message) TextView textViewErrorMessage;
+    @BindView(R.id.srl_recipe_list) SwipeRefreshLayout swipeRefreshLayout;
 
-    RecyclerView recipeRecyclerView;
-    TextView textViewErrorMessage;
-    RecipeAdapter recipeAdapter;
+    List<Recipe> recipeList = new ArrayList<>();
+    RecipeListAdapter recipeListAdapter;
+
     Context context;
     Activity activity;
-     SwipeRefreshLayout swipeRefreshLayout;
+
     public RecipeListFragment(){
         context = this.getContext();
     }
@@ -55,13 +59,12 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_recipe_list, container, false);
+        ButterKnife.bind(this, rootView);
 
         this.activity = getActivity();
-        recipeRecyclerView = rootView.findViewById(R.id.rv_recipes);
-        textViewErrorMessage = rootView.findViewById(R.id.tv_error_message);
-        swipeRefreshLayout = rootView.findViewById(R.id.swipeRefresh);
-        recipeAdapter = new RecipeAdapter(recipeList, getActivity());
-        recipeRecyclerView.setAdapter(recipeAdapter);
+
+        recipeListAdapter = new RecipeListAdapter(recipeList, getActivity());
+        recipeRecyclerView.setAdapter(recipeListAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(this);
         recipeRecyclerView.setLayoutManager(new GridLayoutManager(context, getColumns()));
@@ -76,8 +79,15 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
         return rootView;
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        recipeRecyclerView.setLayoutManager(new GridLayoutManager(context, getColumns()));
+    }
+
     private void loadRecipe() {
         recipeList = loadRecipeFromLocal();
+
         if( recipeList == null ){
             getRecipesFromApi();
         }else{
@@ -87,9 +97,7 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
 
 
     private List<Recipe> loadRecipeFromLocal() {
-
         SharedPreferences sharedPreferences = activity.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE );
-
         String recipeJson = sharedPreferences.getString(RECIPE_LOCAL, null);
 
         if(TextUtils.isEmpty(recipeJson)){
@@ -98,20 +106,6 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
 
         return Recipe.parseJsonList(recipeJson);
     }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        recipeRecyclerView.setLayoutManager(new GridLayoutManager(context, getColumns()));
-    }
-
-//    @Override
-//    public void onListItemClick(Recipe selectedRecipe) {
-//        Intent intent = new Intent(this.getActivity(), StepsListActivity.class);
-//        intent.putExtra(StepsListActivity.SELECTED_RECIPE_JSON, new Gson().toJson(selectedRecipe));
-//        startActivity(intent);
-//    }
-
 
     public int getColumns() {
         return getResources().getInteger(R.integer.recipe_columns);
@@ -123,16 +117,10 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
             swipeRefreshLayout.setRefreshing(true);
         }
 
-
         OkHttpClient client = new OkHttpClient();
-
         HttpUrl url = NetworkUtils.buildRecipeUrl();
-
         Request request = new Request.Builder().url(url).build();
-
         client.newCall(request).enqueue(new Callback() {
-
-
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -140,9 +128,7 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
                         displayErrorMessage();
-
                     }
                 });
 
@@ -154,61 +140,34 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
                 if (response.isSuccessful() && response.body() !=null) {
 
                     String recipeJsonString = response.body().string();
-
                     final List<Recipe> recipeList = Recipe.parseJsonList(recipeJsonString);
-
                     activity.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(RECIPE_LOCAL, recipeJsonString).apply();
-
-                    for (int i = 0; i < 5; i++) {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            Thread.interrupted();
-                        }
-                    }
-
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
                             loadRecipeToAdapter(recipeList);
-                            //recipeAdapter.updateList(recipeList);
-                            ////                            currentMovieList = finalMovieList;
-                            //  //                          moviesAdapter.updateList(finalMovieList);
-                            //                            //scroll back to the top if user is at the bottom of the screen after sort changes
-                            //    //                        moviesRv.smoothScrollToPosition(0);
-                            //        //                    if(swipeRefreshLayout != null){
-                            //      //                          swipeRefreshLayout.setRefreshing(false);
-                            //          //                  }
-
                         }
                     });
 
-
                 }else{
-
-
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
                             displayErrorMessage();
                         }
                     });
-
-
                 }
             }
         });
     }
 
     private void displayErrorMessage() {
+
         textViewErrorMessage.setVisibility(View.VISIBLE);
         if(swipeRefreshLayout != null){
             swipeRefreshLayout.setRefreshing(false);
         }
     }
-
 
     private void loadRecipeToAdapter(List<Recipe> recipeList) {
 
@@ -216,10 +175,8 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
         if(swipeRefreshLayout != null){
             swipeRefreshLayout.setRefreshing(false);
         }
-
-        recipeAdapter.updateList(recipeList);
+        recipeListAdapter.updateList(recipeList);
     }
-
 
     @Override
     public void onRefresh() {

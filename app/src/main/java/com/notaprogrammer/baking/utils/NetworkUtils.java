@@ -4,7 +4,7 @@ import okhttp3.HttpUrl;
 
 public class NetworkUtils {
 
-    private static final String HTTPS = "https"; //recipes
+    private static final String HTTPS = "https";
     private static final String RECIPES_SERVER = "d17h27t6h515a5.cloudfront.net";
     private static final String TOPHER = "topher";
     private static final String YEAR = "2017";
