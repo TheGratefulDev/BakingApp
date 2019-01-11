@@ -75,11 +75,19 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
                     recipe.getServings())
             );
 
-            Picasso.get().load(R.drawable.recipe_place_holder).fit().into(recipeImageView);
 
-            if( !TextUtils.isEmpty(recipe.getImage()) ){
-                Picasso.get().load(recipe.getImage()).centerCrop().placeholder(R.drawable.recipe_place_holder).into(recipeImageView);
-            }
+            recipeImageView.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    Picasso.get().load(R.drawable.recipe_place_holder).centerCrop()
+                            .fit().into(recipeImageView);
+
+                    if( !TextUtils.isEmpty(recipe.getImage()) ){
+                        Picasso.get().load(recipe.getImage()).error(R.drawable.recipe_place_holder).centerCrop().fit().into(recipeImageView);
+                    }
+                }
+            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

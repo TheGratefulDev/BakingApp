@@ -49,8 +49,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
+                android:singleLine="true"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:text="dfdsfddsf" />
+                android:text="" />
 
         </LinearLayout>
 

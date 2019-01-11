@@ -28,6 +28,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.notaprogrammer.baking.R;
 import com.notaprogrammer.baking.activities.StepDetailActivity;
 import com.notaprogrammer.baking.model.Recipe;
+import com.notaprogrammer.baking.utils.NetworkUtils;
 
 import java.util.Objects;
 
@@ -116,7 +117,7 @@ public class StepDetailFragment extends Fragment {
 
         }else{
 
-            if(exoPlayer == null){
+            if(exoPlayer == null && NetworkUtils.isNetworkAvailable(context)){
                 loadVideoToExoPlayerView(context, step);
             }
         }

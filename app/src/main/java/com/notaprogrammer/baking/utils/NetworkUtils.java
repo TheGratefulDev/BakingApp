@@ -1,5 +1,10 @@
 package com.notaprogrammer.baking.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+
+import java.util.Objects;
+
 import okhttp3.HttpUrl;
 
 public class NetworkUtils {
@@ -13,7 +18,7 @@ public class NetworkUtils {
     private static final String FILE = "baking.json";
 
 
-    public static HttpUrl buildRecipeUrl(){
+    public static HttpUrl buildRecipeUrl() {
 
         return new HttpUrl.Builder()
                 .scheme(HTTPS)
@@ -26,4 +31,10 @@ public class NetworkUtils {
                 .build();
     }
 
+    public static boolean isNetworkAvailable(final Context context) {
+        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return Objects.requireNonNull(connectivityManager).getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
 }
+

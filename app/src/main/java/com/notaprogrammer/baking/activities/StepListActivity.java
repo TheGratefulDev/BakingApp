@@ -40,7 +40,7 @@ public class StepListActivity extends AppCompatActivity implements StepListAdapt
 
     @BindView(R.id.toolbar_step_list) Toolbar toolbar;
     @BindView(R.id.rv_stpe_list) RecyclerView recyclerViewStepList;
-    @BindView(R.id.cv_ingredients) CardView headerView;
+    @BindView(R.id.cv_ingredients) CardView cardHeaderView;
 
     Recipe selectedRecipe;
     String recipeJsonString;
@@ -76,11 +76,7 @@ public class StepListActivity extends AppCompatActivity implements StepListAdapt
             if (findViewById(R.id.container_step_detail) != null) {
                 isTwoPane = true;
             }
-
-            HeaderCardView headerCardView = new HeaderCardView();
-            ButterKnife.bind( headerCardView, headerView );
-
-            setupHeaderView( headerCardView, selectedRecipe );
+            setupHeaderView( cardHeaderView, selectedRecipe );
             setupRecyclerView(recyclerViewStepList, selectedRecipe);
 
         } else {
@@ -88,18 +84,15 @@ public class StepListActivity extends AppCompatActivity implements StepListAdapt
         }
     }
 
-    static class HeaderCardView {
-        @BindView(R.id.tv_ingredients) TextView textViewIngredientsDetail;
-    }
 
     private void closeActivityAndDisplayErrorToast() {
         Toast.makeText(StepListActivity.this, R.string.problem_loading_recipe, Toast.LENGTH_SHORT).show();
         finish();
     }
 
-    private void setupHeaderView(HeaderCardView headerView, Recipe selectedRecipe) {
+    private void setupHeaderView(CardView headerView, Recipe selectedRecipe) {
         Spanned spannedDetailText = Html.fromHtml( selectedRecipe.getIngredientCardDetail()  );
-        headerView.textViewIngredientsDetail.setText(spannedDetailText);
+        ((TextView) headerView.findViewById (R.id.tv_ingredients)).setText(spannedDetailText);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, Recipe selectedRecipe) {
@@ -166,6 +159,9 @@ public class StepListActivity extends AppCompatActivity implements StepListAdapt
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
 
 }
 
