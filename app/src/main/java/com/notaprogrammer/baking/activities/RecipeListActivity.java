@@ -32,5 +32,4 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListA
         intent.putExtra(StepListActivity.SELECTED_RECIPE_JSON, new Gson().toJson(recipe));
         startActivity(intent);
     }
-
 }

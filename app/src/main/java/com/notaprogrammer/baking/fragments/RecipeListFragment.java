@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.notaprogrammer.baking.BakingApplication;
 import com.notaprogrammer.baking.R;
 import com.notaprogrammer.baking.adapters.RecipeListAdapter;
 import com.notaprogrammer.baking.model.Recipe;
@@ -117,9 +118,12 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
             swipeRefreshLayout.setRefreshing(true);
         }
 
+        ((BakingApplication) context).setIdleState(true);
+
         OkHttpClient client = new OkHttpClient();
         HttpUrl url = NetworkUtils.buildRecipeUrl();
         Request request = new Request.Builder().url(url).build();
+
         client.newCall(request).enqueue(new Callback() {
 
             @Override
@@ -131,7 +135,7 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
                         displayErrorMessage();
                     }
                 });
-
+                ((BakingApplication) context).setIdleState(false);
             }
 
             @Override
@@ -157,6 +161,7 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
                         }
                     });
                 }
+                ((BakingApplication) context).setIdleState(false);
             }
         });
     }

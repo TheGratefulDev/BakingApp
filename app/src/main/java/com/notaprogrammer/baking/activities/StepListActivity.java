@@ -39,7 +39,7 @@ public class StepListActivity extends AppCompatActivity implements StepListAdapt
     public static final String SELECTED_RECIPE_JSON = "SELECTED_RECIPE_JSON";
 
     @BindView(R.id.toolbar_step_list) Toolbar toolbar;
-    @BindView(R.id.rv_stpe_list) RecyclerView recyclerViewStepList;
+    @BindView(R.id.rv_step_list) RecyclerView recyclerViewStepList;
     @BindView(R.id.cv_ingredients) CardView cardHeaderView;
 
     Recipe selectedRecipe;
@@ -159,9 +159,6 @@ public class StepListActivity extends AppCompatActivity implements StepListAdapt
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
 
 }
 

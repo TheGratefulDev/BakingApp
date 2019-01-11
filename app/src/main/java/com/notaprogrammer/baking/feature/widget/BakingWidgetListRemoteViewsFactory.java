@@ -17,7 +17,7 @@ public class BakingWidgetListRemoteViewsFactory implements RemoteViewsService.Re
     private Context context;
     private List<Recipe.Ingredient> ingredients;
 
-    public BakingWidgetListRemoteViewsFactory(Context context) {
+    BakingWidgetListRemoteViewsFactory(Context context) {
         this.context = context;
     }
 
