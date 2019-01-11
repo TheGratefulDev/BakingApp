@@ -1,4 +1,4 @@
-package com.notaprogrammer.baking;
+package com.notaprogrammer.baking.feature.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
+import com.notaprogrammer.baking.Constant;
+import com.notaprogrammer.baking.R;
 import com.notaprogrammer.baking.activities.RecipeListActivity;
 import com.notaprogrammer.baking.model.Recipe;
 
@@ -27,21 +29,28 @@ public class BakingWidget extends AppWidgetProvider {
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_widget);
-        views.setOnClickPendingIntent(R.id.appwidget_text, pendingIntent);
-        views.setTextViewText(R.id.appwidget_text, context.getString(R.string.widget_default_text));
+
         // Widgets allow click handlers to only launch pending intents
         if (recipe != null) {
+            views.setOnClickPendingIntent(R.id.appwidget_text, pendingIntent);
+
             views.setTextViewText(R.id.appwidget_text, recipe.getName());
             // Initialize the list view
             Intent intent = new Intent(context, BakingWidgetService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             // Bind the remote adapter
             views.setRemoteAdapter(R.id.appwidget_list, intent);
+
+
+            // Instruct the widget manager to update the widget
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.appwidget_list);
+
+        }else{
+            views.setTextViewText(R.id.appwidget_text, context.getString(R.string.widget_default_text));
+            appWidgetManager.updateAppWidget(appWidgetId, views);
         }
 
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.appwidget_list);
     }
 
     @Override

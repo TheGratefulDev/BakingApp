@@ -1,10 +1,12 @@
-package com.notaprogrammer.baking;
+package com.notaprogrammer.baking.feature.widget;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.notaprogrammer.baking.Constant;
+import com.notaprogrammer.baking.R;
 import com.notaprogrammer.baking.model.Recipe;
 
 import java.util.ArrayList;

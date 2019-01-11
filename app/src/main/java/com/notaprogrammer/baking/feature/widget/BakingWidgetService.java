@@ -1,4 +1,4 @@
-package com.notaprogrammer.baking;
+package com.notaprogrammer.baking.feature.widget;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;

@@ -56,7 +56,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         return recipeList.size();
     }
 
-    class RecipeViewHolder extends RecyclerView.ViewHolder {
+    public class RecipeViewHolder extends RecyclerView.ViewHolder {
         //TODO ADD IMAGE
         @BindView(R.id.tv_recipe_name)  TextView recipeNameTextView;
         @BindView(R.id.tv_serving) TextView recipeServingTextView;

@@ -19,7 +19,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.notaprogrammer.baking.BakingWidgetService;
+import com.notaprogrammer.baking.feature.widget.BakingWidgetService;
 import com.notaprogrammer.baking.Constant;
 import com.notaprogrammer.baking.Implement.StepListAdapterOnClickInterface;
 import com.notaprogrammer.baking.R;
@@ -152,7 +152,7 @@ public class StepListActivity extends AppCompatActivity implements StepListAdapt
             sharedPreferences.edit().putString(Constant.RECIPE_WIDGET, selectedRecipe.toJsonString()).apply();
             BakingWidgetService.updateWidget(this);
 
-            Toast.makeText(StepListActivity.this, selectedRecipe.getName() + " ingredient card has been removed from the Widget", Toast.LENGTH_SHORT).show();
+            Toast.makeText(StepListActivity.this, selectedRecipe.getName() + getString(R.string.add_to_widget_message), Toast.LENGTH_SHORT).show();
 
             return true;
         }
