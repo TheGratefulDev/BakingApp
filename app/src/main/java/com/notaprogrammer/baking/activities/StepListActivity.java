@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -19,11 +18,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.notaprogrammer.baking.feature.widget.BakingWidgetService;
 import com.notaprogrammer.baking.Constant;
-import com.notaprogrammer.baking.Implement.StepListAdapterOnClickInterface;
+import com.notaprogrammer.baking.Implements.StepListAdapterOnClickInterface;
 import com.notaprogrammer.baking.R;
 import com.notaprogrammer.baking.adapters.StepsListAdapter;
+import com.notaprogrammer.baking.feature.widget.BakingWidgetService;
 import com.notaprogrammer.baking.fragments.StepDetailFragment;
 import com.notaprogrammer.baking.model.Recipe;
 
@@ -40,7 +39,7 @@ public class StepListActivity extends AppCompatActivity implements StepListAdapt
 
     @BindView(R.id.toolbar_step_list) Toolbar toolbar;
     @BindView(R.id.rv_step_list) RecyclerView recyclerViewStepList;
-    @BindView(R.id.cv_ingredients) CardView cardHeaderView;
+    @BindView(R.id.tv_ingredients) TextView textViewIngredients;
 
     Recipe selectedRecipe;
     String recipeJsonString;
@@ -76,7 +75,7 @@ public class StepListActivity extends AppCompatActivity implements StepListAdapt
             if (findViewById(R.id.container_step_detail) != null) {
                 isTwoPane = true;
             }
-            setupHeaderView( cardHeaderView, selectedRecipe );
+            setupHeaderView( selectedRecipe );
             setupRecyclerView(recyclerViewStepList, selectedRecipe);
 
         } else {
@@ -90,9 +89,9 @@ public class StepListActivity extends AppCompatActivity implements StepListAdapt
         finish();
     }
 
-    private void setupHeaderView(CardView headerView, Recipe selectedRecipe) {
+    private void setupHeaderView(Recipe selectedRecipe) {
         Spanned spannedDetailText = Html.fromHtml( selectedRecipe.getIngredientCardDetail()  );
-        ((TextView) headerView.findViewById (R.id.tv_ingredients)).setText(spannedDetailText);
+        textViewIngredients.setText(spannedDetailText);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, Recipe selectedRecipe) {

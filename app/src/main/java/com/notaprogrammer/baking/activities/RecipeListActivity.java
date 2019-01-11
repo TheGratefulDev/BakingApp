@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.gson.Gson;
-import com.notaprogrammer.baking.Implement.RecipeListAdapterOnClickInterface;
+import com.notaprogrammer.baking.Implements.RecipeListAdapterOnClickInterface;
 import com.notaprogrammer.baking.R;
 import com.notaprogrammer.baking.fragments.RecipeListFragment;
 import com.notaprogrammer.baking.model.Recipe;

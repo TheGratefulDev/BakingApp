@@ -29,8 +29,9 @@ public class BakingApplication extends Application {
     }
 
     public void setIdleState(boolean state) {
-        if (myIdlingResource != null)
+        if (myIdlingResource != null){
             myIdlingResource.setIsIdleNow(state);
+        }
     }
 
     @Nullable

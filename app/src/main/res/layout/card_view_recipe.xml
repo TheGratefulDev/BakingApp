@@ -3,10 +3,10 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view_recipe"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="10dp"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp"
+    android:layout_marginTop="@dimen/margin_small"
+    android:layout_marginBottom="@dimen/margin_big"
+    android:layout_marginStart="@dimen/margin_big"
+    android:layout_marginEnd="@dimen/margin_big"
     android:layout_gravity="center"
 
     android:layout_width="match_parent"
@@ -15,13 +15,12 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="250dp">
+        android:layout_height="@dimen/recipe_card_height">
 
         <ImageView
             android:id="@+id/iv_recipe_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             tools:background="@android:color/black" />
@@ -33,14 +32,14 @@
             android:alpha="3"
             android:background="#CCFFFFFF"
             android:orientation="horizontal"
-            android:padding="5dp">
+            android:padding="@dimen/padding_small">
 
             <TextView
                 android:id="@+id/tv_recipe_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="2dp"
+                android:padding="@dimen/padding_extra_small"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
                 tools:text="Pie Pie Pie" />
 
@@ -48,7 +47,7 @@
                 android:id="@+id/tv_serving"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
+                android:padding="@dimen/padding_extra_small"
                 android:singleLine="true"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:text="" />

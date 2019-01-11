@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.notaprogrammer.baking.Implement.StepListAdapterOnClickInterface;
+import com.notaprogrammer.baking.Implements.StepListAdapterOnClickInterface;
 import com.notaprogrammer.baking.R;
 import com.notaprogrammer.baking.activities.StepListActivity;
 import com.notaprogrammer.baking.model.Recipe;

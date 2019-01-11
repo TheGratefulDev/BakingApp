@@ -10,17 +10,17 @@ android:padding="@dimen/widget_margin">
         android:id="@+id/appwidget_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/margin_medium"
         android:background="@color/colorPrimary"
         android:textColor="#ffffff"
-        android:textSize="24sp"
+        android:textSize="@dimen/text_big"
         android:textStyle="bold|italic" />
 
     <ListView
         android:id="@+id/appwidget_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/margin_medium"
         android:layout_weight="1"
         android:divider="@android:color/white"
         android:dividerHeight="1dp" />

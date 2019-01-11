@@ -35,7 +35,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.notaprogrammer.baking.activities.RecipeListActivity" />
         </activity>
-        
+
         <activity
             android:name=".activities.StepDetailActivity"
             android:configChanges="orientation|screenSize|layoutDirection"

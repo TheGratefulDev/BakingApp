@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.notaprogrammer.baking.Implement.RecipeListAdapterOnClickInterface;
+import com.notaprogrammer.baking.Implements.RecipeListAdapterOnClickInterface;
 import com.notaprogrammer.baking.R;
 import com.notaprogrammer.baking.model.Recipe;
 import com.squareup.picasso.Picasso;

@@ -1,4 +1,4 @@
-package com.notaprogrammer.baking.Implement;
+package com.notaprogrammer.baking.Implements;
 
 import com.notaprogrammer.baking.model.Recipe;
 
