@@ -48,11 +48,9 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
     List<Recipe> recipeList = new ArrayList<>();
     RecipeListAdapter recipeListAdapter;
 
-    Context context;
     Activity activity;
 
     public RecipeListFragment(){
-        context = this.getContext();
     }
 
     @Nullable
@@ -68,7 +66,7 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
         recipeRecyclerView.setAdapter(recipeListAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(this);
-        recipeRecyclerView.setLayoutManager(new GridLayoutManager(context, getColumns()));
+        recipeRecyclerView.setLayoutManager(new GridLayoutManager( activity, getColumns()));
 
         swipeRefreshLayout.post(new Runnable() {
             @Override
@@ -83,7 +81,7 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        recipeRecyclerView.setLayoutManager(new GridLayoutManager(context, getColumns()));
+        recipeRecyclerView.setLayoutManager(new GridLayoutManager(activity, getColumns()));
     }
 
     private void loadRecipe() {
@@ -118,7 +116,7 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
             swipeRefreshLayout.setRefreshing(true);
         }
 
-        ((BakingApplication) context).setIdleState(true);
+        ((BakingApplication) activity.getApplicationContext()).setIdleState(true);
 
         OkHttpClient client = new OkHttpClient();
         HttpUrl url = NetworkUtils.buildRecipeUrl();
@@ -135,7 +133,7 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
                         displayErrorMessage();
                     }
                 });
-                ((BakingApplication) context).setIdleState(false);
+                ((BakingApplication) activity.getApplicationContext()).setIdleState(false);
             }
 
             @Override
@@ -161,7 +159,7 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
                         }
                     });
                 }
-                ((BakingApplication) context).setIdleState(false);
+                ((BakingApplication) activity.getApplicationContext()).setIdleState(false);
             }
         });
     }

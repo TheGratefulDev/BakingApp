@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -56,11 +57,6 @@ public class StepDetailFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -94,8 +90,6 @@ public class StepDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
         ButterKnife.bind(this, rootView);
-
-        initializePlayer(Objects.requireNonNull(this.getActivity()).getApplicationContext(),  step);
 
         if (step != null) {
             String description = getUTF8DecodedDescription(step.getDescription());
@@ -131,12 +125,18 @@ public class StepDetailFragment extends Fragment {
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
 
+
         playerView.setPlayer(exoPlayer);
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context, Util.getUserAgent(getContext(), getString(R.string.app_name)), bandwidthMeter);
         MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(mediaUri);
 
         exoPlayer.prepare(mediaSource);
         exoPlayer.setPlayWhenReady(true);
+
+        if (position != C.TIME_UNSET){
+            exoPlayer.seekTo(position);
+        }
+
         playerView.setVisibility(View.VISIBLE);
     }
 
@@ -149,8 +149,52 @@ public class StepDetailFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        if (Util.SDK_INT > 23) {
+            initializePlayer(Objects.requireNonNull(this.getActivity()).getApplicationContext(),  step);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if ((Util.SDK_INT <= 23 || exoPlayer == null)) {
+            initializePlayer(Objects.requireNonNull(this.getActivity()).getApplicationContext(),  step);
+        }
+    }
+
+    long position = 0;
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if(exoPlayer!=null){
+            position = exoPlayer.getCurrentPosition();
+        }
+
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
+
+
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
-        releasePlayer();
+
     }
 }
